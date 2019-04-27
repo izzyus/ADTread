@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.572
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADTread", "ADTread\ADTread.csproj", "{801381CB-26EC-4549-9376-A331F37E668F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{801381CB-26EC-4549-9376-A331F37E668F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{801381CB-26EC-4549-9376-A331F37E668F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{801381CB-26EC-4549-9376-A331F37E668F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{801381CB-26EC-4549-9376-A331F37E668F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {819EA643-91BC-472C-84F5-ACD75E377F0A}
+	EndGlobalSection
+EndGlobal
