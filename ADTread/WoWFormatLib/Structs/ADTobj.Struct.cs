@@ -1,4 +1,8 @@
-﻿namespace WoWFormatLib.Structs.ADTobj
+﻿//-------------------------------------------
+//From:
+//https://github.com/Marlamin/WoWFormatTest
+//-------------------------------------------
+namespace WoWFormatLib.Structs.ADTobj
 {
     public struct ADTobj
     {

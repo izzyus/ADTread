@@ -1,4 +1,8 @@
-﻿namespace WoWFormatLib.Structs.ADTtex
+﻿//-------------------------------------------
+//From:
+//https://github.com/Marlamin/WoWFormatTest
+//-------------------------------------------
+namespace WoWFormatLib.Structs.ADTtex
 {
     public struct ADTtex
     {

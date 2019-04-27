@@ -1,4 +1,8 @@
-﻿namespace WoWFormatLib.Utils
+﻿//-------------------------------------------
+//From:
+//https://github.com/Marlamin/WoWFormatTest
+//-------------------------------------------
+namespace WoWFormatLib.Utils
 {
     public struct RGBColor
     {

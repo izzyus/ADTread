@@ -1,4 +1,8 @@
-﻿using System;
+﻿//-------------------------------------------
+//From:
+//https://github.com/Marlamin/WoWFormatTest
+//-------------------------------------------
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;

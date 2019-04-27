@@ -1,4 +1,8 @@
-﻿using System;
+﻿//-------------------------------------------
+//From:
+//https://github.com/Marlamin/WoWFormatTest
+//-------------------------------------------
+using System;
 using System.IO;
 
 namespace WoWFormatLib.Utils
