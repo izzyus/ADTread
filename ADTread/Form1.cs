@@ -38,6 +38,8 @@ namespace ADTread
             button2.Enabled = false;
             button2.Text = "Export";
             textBox2.Text = "D:\\export";
+            checkBox1.Text = "Unified export";
+            //checkBox1.Checked = true;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -116,8 +118,9 @@ namespace ADTread
 
                 //Generate the alphamaps:
                 ADT_Alpha AlphaMapsGenerator = new ADT_Alpha();
-                AlphaMapsGenerator.GenerateAlphaMaps(reader.adtfile);
-                
+                //AlphaMapsGenerator.GenerateAlphaMaps(reader.adtfile);
+                AlphaMapsGenerator.GenerateAlphaMaps(reader.adtfile, checkBox1.Checked);
+
                 //Assign layers and names
                 AlphaLayers = AlphaMapsGenerator.AlphaLayers;
                 AlphaLayersNames = AlphaMapsGenerator.AlphaLayersNames;
@@ -136,9 +139,17 @@ namespace ADTread
         }
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (checkBox1.Checked == true)
+            { 
             //Update selected layer:
             pictureBox1.Image = AlphaLayers[listBox1.SelectedIndex];
             groupBox1.Text = "Alphamap [" + listBox1.SelectedIndex.ToString() + "]";
+            }
+            else
+            {
+                groupBox1.Text = "Alphamap [PREVIEW DISABLED IN THIS MODE]";
+            }
+
         }
         
         private void button2_Click(object sender, EventArgs e)
