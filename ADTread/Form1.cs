@@ -40,6 +40,7 @@ namespace ADTread
             textBox2.Text = "D:\\export";
             checkBox1.Text = "Unified export";
             //checkBox1.Checked = true;
+            button3.Text = "Preview";
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -139,16 +140,16 @@ namespace ADTread
         }
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (checkBox1.Checked == true)
-            { 
+            //if (checkBox1.Checked == true)
+            //{ 
             //Update selected layer:
             pictureBox1.Image = AlphaLayers[listBox1.SelectedIndex];
             groupBox1.Text = "Alphamap [" + listBox1.SelectedIndex.ToString() + "]";
-            }
-            else
-            {
-                groupBox1.Text = "Alphamap [PREVIEW DISABLED IN THIS MODE]";
-            }
+            //}
+            //else
+            //{
+            //    groupBox1.Text = "Alphamap [PREVIEW DISABLED IN THIS MODE]";
+            //}
 
         }
         
@@ -177,6 +178,13 @@ namespace ADTread
                     MessageBox.Show("Could not export the alpha maps", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            listBox1.Items.Clear();
+            listBox1.Items.AddRange(AlphaLayersNames.ToArray());
+
         }
     }
 }
