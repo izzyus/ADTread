@@ -119,26 +119,36 @@ namespace Generators.ADT_Alpha
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 //----------------------------------------------------------------------------------------------------------
 
-                    for (uint c = 0; c < adtfile.chunks.Count(); c++)
-                    {
-                        var chunk = adtfile.chunks[c];
-                        var bmp = new System.Drawing.Bitmap(64, 64);
-                        for (int li = 0; li < adtfile.texChunks[c].layers.Count(); li++)
-                        {
-                            if (adtfile.texChunks[c].alphaLayer != null)
-                            {
-                            var values = adtfile.texChunks[c].alphaLayer[li].layer;
-                            
+                for (uint c = 0; c < adtfile.chunks.Count(); c++)
+                {
+                    var chunk = adtfile.chunks[c];
 
-                            for (int x = 0; x < 64; x++)
+                    for (int li = 0; li < adtfile.texChunks[c].layers.Count(); li++)
+                    {
+                        if (adtfile.texChunks[c].alphaLayer != null)
+                        {
+                            var values = adtfile.texChunks[c].alphaLayer[li].layer;
+                            var bmp = new System.Drawing.Bitmap(64, 64);
+                            {
+                                for (int x = 0; x < 64; x++)
+                                {
+                                    for (int y = 0; y < 64; y++)
                                     {
-                                        for (int y = 0; y < 64; y++)
-                                        {
-                                            var color = System.Drawing.Color.FromArgb(values[x * 64 + y], values[x * 64 + y], values[x * 64 + y], values[x * 64 + y]);
-                                            //var color = System.Drawing.Color.FromArgb(values[x * 64 + y], 0, 0, 0); //for pure black generation
-                                            bmp.SetPixel(x , y, color);
-                                        }
+                                        var color = System.Drawing.Color.FromArgb(values[x * 64 + y], values[x * 64 + y], values[x * 64 + y], values[x * 64 + y]);
+                                        //var color = System.Drawing.Color.FromArgb(values[x * 64 + y], 0, 0, 0); //for pure black generation
+                                        bmp.SetPixel(x, y, color);
                                     }
+                                }
+                            }
+                            //----------------------------------------------------------------------------------------------------------
+                            //Store the layer textures
+                            //----------------------------------------------------------------------------------------------------------
+                            var AlphaLayerName = adtfile.textures.filenames[adtfile.texChunks[c].layers[li].textureId].ToLower();
+                            AlphaLayerName = AlphaLayerName.Substring(AlphaLayerName.LastIndexOf("\\", AlphaLayerName.Length - 2) + 1);
+                            AlphaLayerName = AlphaLayerName.Substring(0, AlphaLayerName.Length - 4);
+                            AlphaLayersNames.Add(AlphaLayerName + "_" + c + "_" + li);
+                            //----------------------------------------------------------------------------------------------------------
+
                             //----------------------------------------------------------------------------------------------------------
                             //Fix bmp orientation:
                             //----------------------------------------------------------------------------------------------------------
@@ -149,29 +159,21 @@ namespace Generators.ADT_Alpha
                             //Store the generated map in the array
                             //----------------------------------------------------------------------------------------------------------
                             AlphaLayers.Add(bmp);
-                            //----------------------------------------------------------------------------------------------------------
+                            //----------------------------------------------------------------------------------------------------------   
 
-                            //----------------------------------------------------------------------------------------------------------
-                            //Store the layer textures
-                            //----------------------------------------------------------------------------------------------------------
-                            var AlphaLayerName = adtfile.textures.filenames[adtfile.texChunks[c].layers[li].textureId].ToLower();
-                            AlphaLayerName = AlphaLayerName.Substring(AlphaLayerName.LastIndexOf("\\", AlphaLayerName.Length - 2) + 1);
-                            AlphaLayerName = AlphaLayerName.Substring(0, AlphaLayerName.Length - 4);
-                            AlphaLayersNames.Add(AlphaLayerName + "_" + c + "_" + li);
-                            //----------------------------------------------------------------------------------------------------------
                         }
                     }
-                    }
+                }
 
 
 
 
-                    //----------------------------------------------------------------------------------------------------------
-                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    ///ALPHA MAPS TEST END
-                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    //----------------------------------------------------------------------------------------------------------
-                
+                //----------------------------------------------------------------------------------------------------------
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                ///ALPHA MAPS TEST END
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //----------------------------------------------------------------------------------------------------------
+
             }
         }
     }

@@ -160,10 +160,17 @@ namespace ADTread
             mapname = mapname.Substring(0,mapname.Length-4);
 
             for (int m = 0; m < AlphaLayers.ToArray().Length; m++)
-            {
+                {
                 try
                 {
+                    if (checkBox1.Checked == true)
+                    { 
                     AlphaLayers[m].Save(textBox2.Text + "\\" + mapname + "_alpha_" + AlphaLayersNames[m] + ".png");
+                    }
+                    else
+                    {
+                    AlphaLayers[m].Save(textBox2.Text + "\\" + mapname +"_"+ AlphaLayersNames[m] + ".png");
+                    }
                 }
                 catch
                 {
