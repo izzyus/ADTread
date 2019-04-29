@@ -146,7 +146,8 @@ namespace Generators.ADT_Alpha
                             var AlphaLayerName = adtfile.textures.filenames[adtfile.texChunks[c].layers[li].textureId].ToLower();
                             AlphaLayerName = AlphaLayerName.Substring(AlphaLayerName.LastIndexOf("\\", AlphaLayerName.Length - 2) + 1);
                             AlphaLayerName = AlphaLayerName.Substring(0, AlphaLayerName.Length - 4);
-                            AlphaLayersNames.Add(AlphaLayerName + "_" + c + "_" + li);
+                            //AlphaLayersNames.Add(AlphaLayerName + "_" + c + "_" + li);
+                            AlphaLayersNames.Add(c + "_" + li + "_" + AlphaLayerName);
                             //----------------------------------------------------------------------------------------------------------
 
                             //----------------------------------------------------------------------------------------------------------

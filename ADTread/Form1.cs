@@ -170,7 +170,7 @@ namespace ADTread
                     }
                     else
                     {
-                    AlphaLayers[m].Save(textBox2.Text + "\\" + mapname +"_"+ AlphaLayersNames[m] + ".png");
+                    AlphaLayers[m].Save(textBox2.Text + "\\" + mapname +"-"+ AlphaLayersNames[m] + ".png");
                     }
                 }
                 catch
