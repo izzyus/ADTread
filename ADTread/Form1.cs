@@ -25,8 +25,7 @@ namespace ADTread
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //textBox1.Text = "D:\\mpqediten32\\7zipan_424\\Work\\World\\maps\\Azeroth\\Azeroth_30_49.adt";
-            textBox1.Text = "D:\\mpqediten32\\Work\\World\\maps\\COTWarOfTheAncients\\cotwaroftheancients_40_23.adt";
+            textBox1.Text = "D:\\mpqediten32\\424\\Work\\World\\maps\\Azeroth\\Azeroth_29_51.adt";
             label1.Text = "rootADT";
             label2.Text = "WDTFile";
             label3.Text = "objADT";
@@ -39,7 +38,7 @@ namespace ADTread
             button2.Text = "Export";
             textBox2.Text = "D:\\export";
 
-            button3.Text = "Preview";
+            button3.Text = " ";
 
             radioButton1.Checked = true;
             radioButton1.Text = "Uniform Grayscale";
@@ -166,17 +165,23 @@ namespace ADTread
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             //Try to update the preview:
-            try
-            { 
-            pictureBox1.Image = AlphaLayers[listBox1.SelectedIndex];
-            groupBox1.Text = "Alphamap [" + listBox1.SelectedIndex.ToString() + "]";
-            }
-            catch
+            if (!radioButton3.Checked)
             {
-             //Some error occured   
+                try
+                {
+                    pictureBox1.Image = AlphaLayers[listBox1.SelectedIndex];
+                    groupBox1.Text = "Alphamap [" + listBox1.SelectedIndex.ToString() + "]";
+                }
+                catch
+                {
+                    //Some error occured   
+                }
+            }
+            else
+            {
+                groupBox1.Text = "Alphamap [PREVIEW DISABLED IN THIS MODE]";
             }
         }
-        
         private void button2_Click(object sender, EventArgs e)
         {
             //Get the mapname
@@ -199,8 +204,7 @@ namespace ADTread
 
         private void button3_Click(object sender, EventArgs e)
         {
-            listBox1.Items.Clear();
-            listBox1.Items.AddRange(AlphaLayersNames.ToArray());
+
         }
     }
 }
