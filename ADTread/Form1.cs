@@ -38,15 +38,19 @@ namespace ADTread
             button2.Enabled = false;
             button2.Text = "Export";
             textBox2.Text = "D:\\export";
-            checkBox1.Text = "Unified export";
-            //checkBox1.Checked = true;
+
             button3.Text = "Preview";
+
+            radioButton1.Checked = true;
+            radioButton1.Text = "Uniform Grayscale";
+            radioButton2.Text = "Uniform ARGB";
+            radioButton3.Text = "Non-Uniform";
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             //-----------------------------------------------------------------------------------------------------------------
-            //Get all files from the getgo
+            //Get all files from the getgo:
             //-----------------------------------------------------------------------------------------------------------------
             var ADTfile = textBox1.Text;
             var WDTfile = textBox1.Text.Substring(0, textBox1.Text.Length - 10) + ".wdt";
@@ -106,6 +110,27 @@ namespace ADTread
             //-----------------------------------------------------------------------------------------------------------------
 
             //-----------------------------------------------------------------------------------------------------------------
+            //Establish the generation mode:
+            //-----------------------------------------------------------------------------------------------------------------
+            int GenerationMode = 1;
+            if (radioButton1.Checked)
+            {
+                GenerationMode = 1;
+            }
+            else
+            {
+                if (radioButton2.Checked)
+                {
+                    GenerationMode = 2;
+                }
+                else
+                {
+                    GenerationMode = 3;
+                }
+            }
+            //-----------------------------------------------------------------------------------------------------------------
+
+            //-----------------------------------------------------------------------------------------------------------------
             //File operations:
             //-----------------------------------------------------------------------------------------------------------------
             if (File.Exists(ADTfile) && File.Exists(WDTfile) && File.Exists(ADTobj) && File.Exists(ADTtex))
@@ -120,7 +145,7 @@ namespace ADTread
                 //Generate the alphamaps:
                 ADT_Alpha AlphaMapsGenerator = new ADT_Alpha();
                 //AlphaMapsGenerator.GenerateAlphaMaps(reader.adtfile);
-                AlphaMapsGenerator.GenerateAlphaMaps(reader.adtfile, checkBox1.Checked);
+                AlphaMapsGenerator.GenerateAlphaMaps(reader.adtfile, GenerationMode);
 
                 //Assign layers and names
                 AlphaLayers = AlphaMapsGenerator.AlphaLayers;
@@ -140,17 +165,16 @@ namespace ADTread
         }
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //if (checkBox1.Checked == true)
-            //{ 
-            //Update selected layer:
+            //Try to update the preview:
+            try
+            { 
             pictureBox1.Image = AlphaLayers[listBox1.SelectedIndex];
             groupBox1.Text = "Alphamap [" + listBox1.SelectedIndex.ToString() + "]";
-            //}
-            //else
-            //{
-            //    groupBox1.Text = "Alphamap [PREVIEW DISABLED IN THIS MODE]";
-            //}
-
+            }
+            catch
+            {
+             //Some error occured   
+            }
         }
         
         private void button2_Click(object sender, EventArgs e)
@@ -164,14 +188,7 @@ namespace ADTread
                 {
                 try
                 {
-                    if (checkBox1.Checked == true)
-                    { 
-                    AlphaLayers[m].Save(textBox2.Text + "\\" + mapname + "_alpha_" + AlphaLayersNames[m] + ".png");
-                    }
-                    else
-                    {
-                    AlphaLayers[m].Save(textBox2.Text + "\\" + mapname +"-"+ AlphaLayersNames[m] + ".png");
-                    }
+                    AlphaLayers[m].Save(textBox2.Text + "\\" + mapname + "-" + AlphaLayersNames[m] + ".png");
                 }
                 catch
                 {
@@ -184,7 +201,6 @@ namespace ADTread
         {
             listBox1.Items.Clear();
             listBox1.Items.AddRange(AlphaLayersNames.ToArray());
-
         }
     }
 }

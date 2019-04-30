@@ -17,9 +17,9 @@ namespace Generators.ADT_Alpha
 
         //-----------------------------------------------------------------------------------------------------------------
 
-        public void GenerateAlphaMaps(ADT adtfile, bool GenerateUniformly)
+        public void GenerateAlphaMaps(ADT adtfile, int GenerationMode)
         {
-            if (GenerateUniformly == true) //METHOD 1 (ALL TEXTURES GET ONLY ONE ALPHA FOR ALL THE 256 CHUNKS (ALPHA SIZE = 1024x1024))
+            if (GenerationMode == 1 || GenerationMode == 2) //MODE 1 & 2 (ALL TEXTURES GET ONLY ONE ALPHA FOR ALL THE 256 CHUNKS (ALPHA SIZE = 1024x1024))
             {
                 //----------------------------------------------------------------------------------------------------------
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,9 +64,35 @@ namespace Generators.ADT_Alpha
                                     {
                                         for (int y = 0; y < 64; y++)
                                         {
-                                            var color = System.Drawing.Color.FromArgb(values[x * 64 + y], values[x * 64 + y], values[x * 64 + y], values[x * 64 + y]);
-                                            //var color = System.Drawing.Color.FromArgb(values[x * 64 + y], 0, 0, 0); //for pure black generation
-                                            bmp.SetPixel(x + xOff, y + yOff, color);
+                                            var CurrentColor = new System.Drawing.Color();
+
+                                            if (GenerationMode == 2) //ARGB MODE
+                                            {
+
+                                                switch (li)
+                                                {
+                                                    case 0:
+                                                        CurrentColor = System.Drawing.Color.FromArgb(255, values[x * 64 + y], 0, 0);
+                                                        break;
+                                                    case 1:
+                                                        CurrentColor = System.Drawing.Color.FromArgb(255, 0, values[x * 64 + y], 0);
+                                                        break;
+                                                    case 2:
+                                                        CurrentColor = System.Drawing.Color.FromArgb(255, 0, 0, values[x * 64 + y]);
+                                                        break;
+                                                    case 3:
+                                                        CurrentColor = System.Drawing.Color.FromArgb(values[x * 64 + y], 0, 0, 0);
+                                                        break;
+                                                }
+                                                
+                                            }
+                                            else //FLAT MODE
+                                            {
+                                                CurrentColor = System.Drawing.Color.FromArgb(values[x * 64 + y], values[x * 64 + y], values[x * 64 + y], values[x * 64 + y]);
+                                                //var color = System.Drawing.Color.FromArgb(values[x * 64 + y], 0, 0, 0); //for pure black generation
+                                            }
+
+                                            bmp.SetPixel(x + xOff, y + yOff, CurrentColor);
                                         }
                                     }
                                 }
@@ -111,7 +137,7 @@ namespace Generators.ADT_Alpha
 
                 }
             }
-            else //METHOD 2 (ALL THE CHUNKS (256) GET AN ALPHA FOR EVERY USED TEXTURE (ALPHA SIZE = 64x64 ))
+            else //METHOD 3 (ALL THE CHUNKS (256) GET AN ALPHA FOR EVERY USED TEXTURE (ALPHA SIZE = 64x64 ))
             {
                 //----------------------------------------------------------------------------------------------------------
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
