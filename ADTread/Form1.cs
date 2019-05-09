@@ -251,8 +251,8 @@ namespace ADTread
             mapname = mapname.Substring(mapname.LastIndexOf("\\", mapname.Length - 2) + 1);
             mapname = mapname.Substring(0, mapname.Length - 4);
 
-            //System.IO.File.WriteAllLines(textBox2.Text + "\\" + mapname + "_" + "layers.txt", AlphaLayersNames.ToArray());
-            //File.WriteAllLines(textBox2.Text + "\\" + mapname + "_" + "layers.txt", AlphaLayersNames.ToArray());
+            //System.IO.File.WriteAllLines(textBox2.Text + "\\" + mapname + "_" + "layers.csv", AlphaLayersNames.ToArray());
+            //File.WriteAllLines(textBox2.Text + "\\" + mapname + "_" + "layers.csv", AlphaLayersNames.ToArray());
 
             //Create a folder with the map name (if non-existent) to save all everything in
             if (!Directory.Exists(textBox2.Text + "\\" + mapname))
@@ -267,9 +267,9 @@ namespace ADTread
                 }
             }
 
-            if (File.Exists(textBox2.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.txt"))
+            if (File.Exists(textBox2.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv"))
             {
-                File.Delete(textBox2.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.txt");
+                File.Delete(textBox2.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv");
             }
 
             string LineOfText = "";
@@ -285,15 +285,15 @@ namespace ADTread
                 }
                 else //Next Chunk
                 {
-                    //File.AppendAllText(textBox2.Text + "\\" + mapname + "_" + "layers.txt", LineOfText.Substring(0, LineOfText.Length - 1) + Environment.NewLine);
-                    File.AppendAllText(textBox2.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.txt", LineOfText.Substring(0, LineOfText.Length - 1) + Environment.NewLine);
+                    //File.AppendAllText(textBox2.Text + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1) + Environment.NewLine);
+                    File.AppendAllText(textBox2.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1) + Environment.NewLine);
                     LineOfText = values[0] + ";" + values[1] + ";" + values[2] + ";";   
                     cchunk++;
                 }
             }
             //Last entry, i have no idea how to do it properly so i am doing it like this
-            //File.AppendAllText(textBox2.Text + "\\" + mapname + "_" + "layers.txt", LineOfText.Substring(0, LineOfText.Length - 1));
-            File.AppendAllText(textBox2.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.txt", LineOfText.Substring(0, LineOfText.Length - 1));
+            //File.AppendAllText(textBox2.Text + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1));
+            File.AppendAllText(textBox2.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1));
         }
     }
 }
