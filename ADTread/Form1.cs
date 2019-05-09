@@ -39,7 +39,7 @@ namespace ADTread
             textBox2.Text = "D:\\export";
 
             button3.Text = "Layers CSV";
-
+            button3.Enabled = false;
             radioButton1.Checked = true;
             radioButton1.Text = "Uniform Grayscale";
             radioButton2.Text = "Uniform ARGB";
@@ -161,6 +161,17 @@ namespace ADTread
                 MessageBox.Show("One or more files are missing", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 button2.Enabled = false;
             }
+            
+            //Disable Layers CSV export button unless method 3 is used
+            if (radioButton3.Checked)
+            {
+                button3.Enabled = true;
+            }
+            else
+            {
+                button3.Enabled = false;
+            }
+
         }
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -239,6 +250,12 @@ namespace ADTread
                 {
                     MessageBox.Show("Could not create folder: " + textBox2.Text + "\\" + mapname, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+            }
+
+
+            if (File.Exists(textBox2.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.txt"))
+            {
+                File.Delete(textBox2.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.txt");
             }
 
 
