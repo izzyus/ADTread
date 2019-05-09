@@ -219,7 +219,8 @@ namespace ADTread
                 {
                     //AlphaLayers[m].Save(textBox2.Text + "\\" + mapname + "-" + AlphaLayersNames[m] + ".png");
 
-                    AlphaLayers[m].Save(textBox2.Text + "\\" + mapname + "\\" + mapname + "-" + AlphaLayersNames[m] + ".png");
+                    //AlphaLayers[m].Save(textBox2.Text + "\\" + mapname + "\\" + mapname + "-" + AlphaLayersNames[m] + ".png");
+                    AlphaLayers[m].Save(textBox2.Text + "\\" + mapname + "\\" + mapname + "-" + AlphaLayersNames[m].Replace(";", "_") + ".png");
                 }
                 catch
                 {
