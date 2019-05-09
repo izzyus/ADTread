@@ -200,6 +200,7 @@ namespace ADTread
             mapname = mapname.Substring(mapname.LastIndexOf("\\", mapname.Length - 2) + 1);
             mapname = mapname.Substring(0,mapname.Length-4);
 
+            //Create a folder with the map name (if non-existent) to save all everything in
             if (!Directory.Exists(textBox2.Text + "\\" + mapname ))
             {
                 try
@@ -212,15 +213,28 @@ namespace ADTread
                 }
             }
 
+            //Create a folder for the alphamaps (if none-xistent) to save the alphas separately
+            if (!Directory.Exists(textBox2.Text + "\\" + mapname + "\\alphamaps\\"))
+            {
+                try
+                {
+                    Directory.CreateDirectory(textBox2.Text + "\\" + mapname + "\\alphamaps\\");
+                }
+                catch
+                {
+                    MessageBox.Show(textBox2.Text + "\\" + mapname + "\\alphamaps\\");
+                }
+
+            }
 
             for (int m = 0; m < AlphaLayers.ToArray().Length; m++)
                 {
                 try
                 {
                     //AlphaLayers[m].Save(textBox2.Text + "\\" + mapname + "-" + AlphaLayersNames[m] + ".png");
-
                     //AlphaLayers[m].Save(textBox2.Text + "\\" + mapname + "\\" + mapname + "-" + AlphaLayersNames[m] + ".png");
-                    AlphaLayers[m].Save(textBox2.Text + "\\" + mapname + "\\" + mapname + "-" + AlphaLayersNames[m].Replace(";", "_") + ".png");
+                    //AlphaLayers[m].Save(textBox2.Text + "\\" + mapname + "\\" + mapname + "-" + AlphaLayersNames[m].Replace(";", "_") + ".png");
+                    AlphaLayers[m].Save(textBox2.Text + "\\" + mapname + "\\alphamaps\\" + mapname + "-" + AlphaLayersNames[m].Replace(";", "_") + ".png");
                 }
                 catch
                 {
@@ -240,7 +254,7 @@ namespace ADTread
             //System.IO.File.WriteAllLines(textBox2.Text + "\\" + mapname + "_" + "layers.txt", AlphaLayersNames.ToArray());
             //File.WriteAllLines(textBox2.Text + "\\" + mapname + "_" + "layers.txt", AlphaLayersNames.ToArray());
 
-
+            //Create a folder with the map name (if non-existent) to save all everything in
             if (!Directory.Exists(textBox2.Text + "\\" + mapname))
             {
                 try
@@ -253,13 +267,10 @@ namespace ADTread
                 }
             }
 
-
             if (File.Exists(textBox2.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.txt"))
             {
                 File.Delete(textBox2.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.txt");
             }
-
-
 
             string LineOfText = "";
             int cchunk = 0;
