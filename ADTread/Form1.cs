@@ -31,7 +31,10 @@ namespace ADTread
             label3.Text = "objADT";
             label4.Text = "texADT";
             groupBox1.Text = "Alphamap [#]";
+
+            panel1.AutoScroll = true;
             pictureBox1.SizeMode = PictureBoxSizeMode.AutoSize;
+
             button1.Text = "Load";
             this.Text = "ADT Alpha Read";
             button2.Enabled = false;
