@@ -38,8 +38,8 @@ namespace ADTread
             button2.Text = "Export";
             textBox2.Text = "D:\\export";
 
-            button3.Text = "Layers CSV";
-            button3.Enabled = false;
+            button3.Text = " ";
+
             radioButton1.Checked = true;
             radioButton1.Text = "Uniform Grayscale";
             radioButton2.Text = "Uniform ARGB";
@@ -137,7 +137,7 @@ namespace ADTread
                 //Read the ADT file:
                 ADTReader reader = new ADTReader();
                 reader.LoadADT(ADTfile, WDTfile, ADTobj, ADTtex);
-                
+
                 //Add in the listbox all the textures (+path) used by the adt file:
                 listBox1.Items.AddRange(reader.adtfile.textures.filenames);
 
@@ -160,16 +160,6 @@ namespace ADTread
             {
                 MessageBox.Show("One or more files are missing", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 button2.Enabled = false;
-            }
-            
-            //Disable Layers CSV export button unless method 3 is used
-            if (radioButton3.Checked)
-            {
-                button3.Enabled = true;
-            }
-            else
-            {
-                button3.Enabled = false;
             }
 
         }
@@ -198,10 +188,10 @@ namespace ADTread
             //Get the mapname
             string mapname = textBox1.Text;
             mapname = mapname.Substring(mapname.LastIndexOf("\\", mapname.Length - 2) + 1);
-            mapname = mapname.Substring(0,mapname.Length-4);
+            mapname = mapname.Substring(0, mapname.Length - 4);
 
             //Create a folder with the map name (if non-existent) to save all everything in
-            if (!Directory.Exists(textBox2.Text + "\\" + mapname ))
+            if (!Directory.Exists(textBox2.Text + "\\" + mapname))
             {
                 try
                 {
@@ -228,7 +218,7 @@ namespace ADTread
             }
 
             for (int m = 0; m < AlphaLayers.ToArray().Length; m++)
-                {
+            {
                 try
                 {
                     //AlphaLayers[m].Save(textBox2.Text + "\\" + mapname + "-" + AlphaLayersNames[m] + ".png");
@@ -241,59 +231,43 @@ namespace ADTread
                     MessageBox.Show("Could not export the alpha maps", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+
+            //Export information about the layers (csv)
+            if (radioButton3.Checked)
+            {
+                if (File.Exists(textBox2.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv"))
+                {
+                    File.Delete(textBox2.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv");
+                }
+
+                string LineOfText = "";
+                int cchunk = 0;
+                for (int i = 0; i < AlphaLayersNames.ToArray().Length; i++)
+                {
+                    var line = AlphaLayersNames[i];
+                    var values = line.Split(';');
+                    var chunk = int.Parse(values[0]);
+                    if (chunk == cchunk)
+                    {
+                        LineOfText = LineOfText + values[0] + ";" + values[1] + ";" + values[2] + ";";
+                    }
+                    else //Next Chunk
+                    {
+                        //File.AppendAllText(textBox2.Text + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1) + Environment.NewLine);
+                        File.AppendAllText(textBox2.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1) + Environment.NewLine);
+                        LineOfText = values[0] + ";" + values[1] + ";" + values[2] + ";";
+                        cchunk++;
+                    }
+                }
+                //Last entry, i have no idea how to do it properly so i am doing it like this
+                //File.AppendAllText(textBox2.Text + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1));
+                File.AppendAllText(textBox2.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1));
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            //Experimental CSV stuff
-            //Get the mapname
-            string mapname = textBox1.Text;
-            mapname = mapname.Substring(mapname.LastIndexOf("\\", mapname.Length - 2) + 1);
-            mapname = mapname.Substring(0, mapname.Length - 4);
 
-            //System.IO.File.WriteAllLines(textBox2.Text + "\\" + mapname + "_" + "layers.csv", AlphaLayersNames.ToArray());
-            //File.WriteAllLines(textBox2.Text + "\\" + mapname + "_" + "layers.csv", AlphaLayersNames.ToArray());
-
-            //Create a folder with the map name (if non-existent) to save all everything in
-            if (!Directory.Exists(textBox2.Text + "\\" + mapname))
-            {
-                try
-                {
-                    Directory.CreateDirectory(textBox2.Text + "\\" + mapname + "\\");
-                }
-                catch
-                {
-                    MessageBox.Show("Could not create folder: " + textBox2.Text + "\\" + mapname, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-
-            if (File.Exists(textBox2.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv"))
-            {
-                File.Delete(textBox2.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv");
-            }
-
-            string LineOfText = "";
-            int cchunk = 0;
-            for (int i = 0; i < AlphaLayersNames.ToArray().Length; i++)
-            {
-            var line = AlphaLayersNames[i];
-            var values = line.Split(';');
-            var chunk = int.Parse(values[0]);
-                if (chunk == cchunk)
-                {
-                    LineOfText = LineOfText + values[0] + ";" + values[1] + ";" + values[2] + ";";
-                }
-                else //Next Chunk
-                {
-                    //File.AppendAllText(textBox2.Text + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1) + Environment.NewLine);
-                    File.AppendAllText(textBox2.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1) + Environment.NewLine);
-                    LineOfText = values[0] + ";" + values[1] + ";" + values[2] + ";";   
-                    cchunk++;
-                }
-            }
-            //Last entry, i have no idea how to do it properly so i am doing it like this
-            //File.AppendAllText(textBox2.Text + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1));
-            File.AppendAllText(textBox2.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1));
         }
     }
 }
