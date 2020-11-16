@@ -15,7 +15,9 @@ namespace ADTread
         //-----------------------------------------------------------------------------------------------------------------
 
         public List<Bitmap> AlphaLayers = new List<Bitmap>();
-        public List<String> AlphaLayersNames = new List<String>();
+        //public List<String> AlphaLayersNames = new List<String>();
+        string[] AlphaLayersNames;
+        public List<Bitmap> TextureLayers = new List<Bitmap>();
 
         //-----------------------------------------------------------------------------------------------------------------
         public Form1()
@@ -25,7 +27,7 @@ namespace ADTread
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            textBox1.Text = "D:\\mpqediten32\\424\\Work\\World\\maps\\Azeroth\\Azeroth_29_51.adt";
+            textBox1.Text = @"D:\Tools\cascview\Work\world\maps\smvalliancegarrisonlevel2\smvalliancegarrisonlevel2_31_28.adt";
             label1.Text = "rootADT";
             label2.Text = "WDTFile";
             label3.Text = "objADT";
@@ -41,12 +43,12 @@ namespace ADTread
             button2.Text = "Export";
             textBox2.Text = "D:\\export";
 
-            button3.Text = " ";
+            //button3.Text = " ";
 
-            radioButton1.Checked = true;
-            radioButton1.Text = "Uniform Grayscale";
-            radioButton2.Text = "Uniform ARGB";
-            radioButton3.Text = "Non-Uniform";
+            //radioButton1.Checked = true;
+            //radioButton1.Text = "Uniform Grayscale";
+            //radioButton2.Text = "Uniform ARGB";
+            //radioButton3.Text = "Non-Uniform";
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -102,34 +104,15 @@ namespace ADTread
 
             //Clear listbox first
             listBox1.Items.Clear();
+            listBox2.Items.Clear();
             //Clear arrays
             AlphaLayers.Clear();
-            AlphaLayersNames.Clear();
+            TextureLayers.Clear();
+            //AlphaLayersNames.Clear();
             //Clear the picturebox
             pictureBox1.Image = null;
             //Reset groupbox name
             groupBox1.Text = "Alphamap [#]";
-            //-----------------------------------------------------------------------------------------------------------------
-
-            //-----------------------------------------------------------------------------------------------------------------
-            //Establish the generation mode:
-            //-----------------------------------------------------------------------------------------------------------------
-            int GenerationMode = 1;
-            if (radioButton1.Checked)
-            {
-                GenerationMode = 1;
-            }
-            else
-            {
-                if (radioButton2.Checked)
-                {
-                    GenerationMode = 2;
-                }
-                else
-                {
-                    GenerationMode = 3;
-                }
-            }
             //-----------------------------------------------------------------------------------------------------------------
 
             //-----------------------------------------------------------------------------------------------------------------
@@ -147,11 +130,19 @@ namespace ADTread
                 //Generate the alphamaps:
                 ADT_Alpha AlphaMapsGenerator = new ADT_Alpha();
                 //AlphaMapsGenerator.GenerateAlphaMaps(reader.adtfile);
-                AlphaMapsGenerator.GenerateAlphaMaps(reader.adtfile, GenerationMode);
+                AlphaMapsGenerator.GenerateAlphaMaps(reader.adtfile);
 
                 //Assign layers and names
                 AlphaLayers = AlphaMapsGenerator.AlphaLayers;
-                AlphaLayersNames = AlphaMapsGenerator.AlphaLayersNames;
+                //AlphaLayersNames = AlphaMapsGenerator.AlphaLayersNames;
+                AlphaLayersNames = reader.adtfile.textures.filenames;
+
+                TextureLayers = AlphaMapsGenerator.TextureLayers;
+
+                for (int i = 0; i < AlphaLayers.Count; i++)
+                {
+                    listBox2.Items.Add(String.Format("Splatmap {0}", i));
+                }
 
                 //Enable the export button if the generation was successful
                 if (AlphaLayers != null)
@@ -168,23 +159,17 @@ namespace ADTread
         }
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //Try to update the preview:
-            if (!radioButton3.Checked)
+            try
             {
-                try
-                {
-                    pictureBox1.Image = AlphaLayers[listBox1.SelectedIndex];
-                    groupBox1.Text = "Alphamap [" + listBox1.SelectedIndex.ToString() + "]";
-                }
-                catch
-                {
-                    //Some error occured   
-                }
+                pictureBox1.Image = TextureLayers[listBox1.SelectedIndex];
+                groupBox1.Text = "Texture mask [" + listBox1.SelectedIndex.ToString() + "]";
             }
-            else
+            catch
             {
-                groupBox1.Text = "Alphamap [PREVIEW DISABLED IN THIS MODE]";
+                //Some error occured   
             }
+
+
         }
         private void button2_Click(object sender, EventArgs e)
         {
@@ -224,10 +209,18 @@ namespace ADTread
             {
                 try
                 {
-                    //AlphaLayers[m].Save(textBox2.Text + "\\" + mapname + "-" + AlphaLayersNames[m] + ".png");
-                    //AlphaLayers[m].Save(textBox2.Text + "\\" + mapname + "\\" + mapname + "-" + AlphaLayersNames[m] + ".png");
-                    //AlphaLayers[m].Save(textBox2.Text + "\\" + mapname + "\\" + mapname + "-" + AlphaLayersNames[m].Replace(";", "_") + ".png");
-                    AlphaLayers[m].Save(textBox2.Text + "\\" + mapname + "\\alphamaps\\" + mapname + "-" + AlphaLayersNames[m].Replace(";", "_") + ".png");
+                    AlphaLayers[m].Save(textBox2.Text + "\\" + mapname + "\\alphamaps\\" + mapname + "_Splatmap" + m + ".png");
+                }
+                catch
+                {
+                    MessageBox.Show("Could not export the alpha maps", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            for (int m = 0; m < TextureLayers.ToArray().Length; m++)
+            {
+                try
+                {
+                    TextureLayers[m].Save(textBox2.Text + "\\" + mapname + "\\alphamaps\\" + mapname + "-" + Path.GetFileNameWithoutExtension(AlphaLayersNames[m]) + ".png");
                 }
                 catch
                 {
@@ -236,41 +229,54 @@ namespace ADTread
             }
 
             //Export information about the layers (csv)
-            if (radioButton3.Checked)
-            {
-                if (File.Exists(textBox2.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv"))
-                {
-                    File.Delete(textBox2.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv");
-                }
+            //if (radioButton3.Checked)
+            //{
+            //    if (File.Exists(textBox2.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv"))
+            //    {
+            //        File.Delete(textBox2.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv");
+            //    }
 
-                string LineOfText = "";
-                int cchunk = 0;
-                for (int i = 0; i < AlphaLayersNames.ToArray().Length; i++)
-                {
-                    var line = AlphaLayersNames[i];
-                    var values = line.Split(';');
-                    var chunk = int.Parse(values[0]);
-                    if (chunk == cchunk)
-                    {
-                        LineOfText = LineOfText + values[0] + ";" + values[1] + ";" + values[2] + ";";
-                    }
-                    else //Next Chunk
-                    {
-                        //File.AppendAllText(textBox2.Text + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1) + Environment.NewLine);
-                        File.AppendAllText(textBox2.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1) + Environment.NewLine);
-                        LineOfText = values[0] + ";" + values[1] + ";" + values[2] + ";";
-                        cchunk++;
-                    }
-                }
-                //Last entry, i have no idea how to do it properly so i am doing it like this
-                //File.AppendAllText(textBox2.Text + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1));
-                File.AppendAllText(textBox2.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1));
-            }
+            //    string LineOfText = "";
+            //    int cchunk = 0;
+            //    for (int i = 0; i < AlphaLayersNames.ToArray().Length; i++)
+            //    {
+            //        var line = AlphaLayersNames[i];
+            //        var values = line.Split(';');
+            //        var chunk = int.Parse(values[0]);
+            //        if (chunk == cchunk)
+            //        {
+            //            LineOfText = LineOfText + values[0] + ";" + values[1] + ";" + values[2] + ";";
+            //        }
+            //        else //Next Chunk
+            //        {
+            //            //File.AppendAllText(textBox2.Text + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1) + Environment.NewLine);
+            //            File.AppendAllText(textBox2.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1) + Environment.NewLine);
+            //            LineOfText = values[0] + ";" + values[1] + ";" + values[2] + ";";
+            //            cchunk++;
+            //        }
+            //    }
+            //    //Last entry, i have no idea how to do it properly so i am doing it like this
+            //    //File.AppendAllText(textBox2.Text + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1));
+            //    File.AppendAllText(textBox2.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1));
+            //}
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                pictureBox1.Image = AlphaLayers[listBox2.SelectedIndex];
+                groupBox1.Text = "Splatmap [" + listBox2.SelectedIndex.ToString() + "]";
+            }
+            catch
+            {
+                //Some error occured   
+            }
         }
     }
 }
