@@ -129,15 +129,15 @@ namespace ADTread
 
                 //Generate the alphamaps:
                 ADT_Alpha AlphaMapsGenerator = new ADT_Alpha();
+                AlphaMapsGenerator.GenerateAlphaMaps(reader.adtfile,6);
                 //AlphaMapsGenerator.GenerateAlphaMaps(reader.adtfile);
-                AlphaMapsGenerator.GenerateAlphaMaps(reader.adtfile);
 
                 //Assign layers and names
                 AlphaLayers = AlphaMapsGenerator.AlphaLayers;
                 //AlphaLayersNames = AlphaMapsGenerator.AlphaLayersNames;
                 AlphaLayersNames = reader.adtfile.textures.filenames;
 
-                TextureLayers = AlphaMapsGenerator.TextureLayers;
+                //TextureLayers = AlphaMapsGenerator.TextureLayers;
 
                 for (int i = 0; i < AlphaLayers.Count; i++)
                 {
