@@ -229,6 +229,7 @@ namespace Generators.ADT_Alpha
                                     var yloop = ((j / bytesPerRow) - (y * bytesPerColumn) / bytesPerRow);
                                     var xloop = ((i / 4) - ((x * bytesPerSubRow) / 4));
                                     var alphaIndex = (yloop * 64) + xloop;
+                                    //Console.WriteLine(alphaIndex);
                                     // The first TGA image will have base texture flooded with red.
                                     // THIS IS WRONG! Must flood base color, may be R, G, B, A
                                     // In the case of Azeroth_29_47 subchunk 2, base layer is blue
@@ -300,7 +301,7 @@ namespace Generators.ADT_Alpha
                                             }
 
                                             pixelData[imageIndex][j + i + channelIndex] = alphaLayers[k].layer[alphaIndex];
-
+                                            //Console.WriteLine(pixelData[imageIndex][j + i + channelIndex]);
                                             var subtractImages = imageIndex % 4; // subtract all 4 channels (full image)
 
                                             for (var m = 0; m < imageCount; m++)
@@ -312,6 +313,7 @@ namespace Generators.ADT_Alpha
                                                 {
                                                     if (chunkIndex == 75 && xloop == 0 && yloop == 0) { Console.WriteLine("subtract full image: " + m); }
                                                     if (pixelData[m][j + i + 0] == null) { Console.WriteLine("pixelData[" + m + "] is undefined!"); }
+                                                    //Console.WriteLine(String.Format("Layerdata: {0}\nPixelData{1}",alphaLayers[k].layer[alphaIndex], pixelData[m][j + i + 0]));
                                                     pixelData[m][j + i + 0] -= alphaLayers[k].layer[alphaIndex];
                                                     pixelData[m][j + i + 1] -= alphaLayers[k].layer[alphaIndex];
                                                     pixelData[m][j + i + 2] -= alphaLayers[k].layer[alphaIndex];
@@ -333,7 +335,7 @@ namespace Generators.ADT_Alpha
                         }
                     }
                 }
-                for (int i = 0; i < imageCount; i++)
+                for (int t = 0; t < imageCount; t++)
                 {
                     var bmp = new Bitmap(1024, 1024);
 
@@ -341,7 +343,14 @@ namespace Generators.ADT_Alpha
                     {
                         for (int y = 0; y < 1024; y++)
                         {
-                            Color currentColor = Color.FromArgb(ZeroClamp(pixelData[i][3]), ZeroClamp(pixelData[i][0]), ZeroClamp(pixelData[i][1]), ZeroClamp(pixelData[i][2]));
+                            var idx = ((1024 - x - 1) * 1024 + y) * 4;
+                            Color currentColor = Color.FromArgb(
+                                ZeroClamp(pixelData[t][idx + 3]),//A
+                                ZeroClamp(pixelData[t][idx + 0]),//R
+                                ZeroClamp(pixelData[t][idx + 1]),//G
+                                ZeroClamp(pixelData[t][idx + 2]) //B 
+                                );
+
                             bmp.SetPixel(x, y, currentColor);
                         }
                     }
@@ -364,6 +373,7 @@ namespace Generators.ADT_Alpha
 
         private int ZeroClamp(int x)
         {
+            //Console.WriteLine(x);
             if (x < 0)
                 return 0;
 
