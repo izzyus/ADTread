@@ -5,8 +5,6 @@ using System.Windows.Forms;
 using System.IO;
 using WoWFormatLib.FileReaders;
 using Generators.ADT_Alpha;
-using Generators.ADT_Height;
-using Newtonsoft.Json;
 
 namespace ADTread
 {
@@ -29,7 +27,7 @@ namespace ADTread
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            textBox1.Text = @"D:\Tools\cascview\Work\world\maps\smvalliancegarrisonlevel2\smvalliancegarrisonlevel2_31_28.adt";
+            textBox1.Text = @"D:\Tools\cascview\Work\world\maps\azeroth\azeroth_30_48.adt";
             label1.Text = "rootADT";
             label2.Text = "WDTFile";
             label3.Text = "objADT";
@@ -131,16 +129,13 @@ namespace ADTread
 
                 //Generate the alphamaps:
                 ADT_Alpha AlphaMapsGenerator = new ADT_Alpha();
-                //AlphaMapsGenerator.GenerateAlphaMaps(reader.adtfile,6);
-                ADT_Height heightGen = new ADT_Height();
-                heightGen.GenerateHeightmap(reader.adtfile);
-                File.WriteAllText(@"D:\export\smvalliancegarrisonlevel2_31_28_HeightData.json", JsonConvert.SerializeObject(heightGen.heightArray2d));
+                AlphaMapsGenerator.GenerateAlphaMaps(reader.adtfile, 6);
                 //AlphaMapsGenerator.GenerateAlphaMaps(reader.adtfile);
 
                 //Assign layers and names
-                //AlphaLayers = AlphaMapsGenerator.AlphaLayers;
+                AlphaLayers = AlphaMapsGenerator.AlphaLayers;
                 //AlphaLayersNames = AlphaMapsGenerator.AlphaLayersNames;
-                //AlphaLayersNames = reader.adtfile.textures.filenames;
+                AlphaLayersNames = reader.adtfile.textures.filenames;
 
                 //TextureLayers = AlphaMapsGenerator.TextureLayers;
 
